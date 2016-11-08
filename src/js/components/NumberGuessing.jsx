@@ -8,9 +8,8 @@ var NumberGuessing = React.createClass({
 	startGame: function() {
 		this.setState({
 			gameStatus: 'playing',
-			numberToGuess: Math.floor(Math.random()*11),
+			numberToGuess: Math.floor(Math.random()*100),
 			guesses: [],
-			hint: ""
 		});
 	},
 	componentDidMount: function() {
@@ -24,18 +23,9 @@ var NumberGuessing = React.createClass({
 			this.setState({gameStatus: 'win'});
 		} else {
 			if (tries < 5) {
-				if(userGuess < correctNum) {
-					this.setState({
-						guesses: this.state.guesses.concat(userGuess),
-							hint: "too low!"
-						});
-				}
-				if (userGuess > correctNum) {
-					this.setState({
-						guesses: this.state.guesses.concat(userGuess),
-						hint: "too high!"
-					});
-				}
+				this.setState({
+					guesses: this.state.guesses.concat(userGuess),
+				})
 			} 
 			if (tries >= 5) {
 				this.setState({gameStatus: 'lose'});
@@ -57,15 +47,16 @@ var NumberGuessing = React.createClass({
 				</div>
 				);
 		} else {
+			var userGuess = this.state.guesses;
 			return (
 			<div>
 				<p>Guess a number between 1 and 100</p>
 				<input ref="userGuess" type="text" value={this.state.value}></input>
 				<button ref="guessBtn" onClick={this._handleUserGuess}>Guess</button>
 				<div>
-					<p>{this.state.hint}</p>
-					<p>Your guesses: {this.state.guesses.toString(', ')}</p>
-					<p>Remaining tries: {this.state.guesses.length}</p>
+					<p>{userGuess[userGuess.length - 1] < this.state.numberToGuess ? "Too low" : "Too high"}</p>
+					<p>Your guesses: {userGuess.toString(',')}</p>
+					<p>Remaining tries: {userGuess.length}</p>
 				</div>
 			</div>
 			);

@@ -21813,9 +21813,8 @@
 		startGame: function startGame() {
 			this.setState({
 				gameStatus: 'playing',
-				numberToGuess: Math.floor(Math.random() * 11),
-				guesses: [],
-				hint: ""
+				numberToGuess: Math.floor(Math.random() * 100),
+				guesses: []
 			});
 		},
 		componentDidMount: function componentDidMount() {
@@ -21829,18 +21828,9 @@
 				this.setState({ gameStatus: 'win' });
 			} else {
 				if (tries < 5) {
-					if (userGuess < correctNum) {
-						this.setState({
-							guesses: this.state.guesses.concat(userGuess),
-							hint: "too low!"
-						});
-					}
-					if (userGuess > correctNum) {
-						this.setState({
-							guesses: this.state.guesses.concat(userGuess),
-							hint: "too high!"
-						});
-					}
+					this.setState({
+						guesses: this.state.guesses.concat(userGuess)
+					});
 				}
 				if (tries >= 5) {
 					this.setState({ gameStatus: 'lose' });
@@ -21871,6 +21861,7 @@
 						)
 					);
 				} else {
+					var userGuess = this.state.guesses;
 					return React.createElement(
 						'div',
 						null,
@@ -21891,19 +21882,19 @@
 							React.createElement(
 								'p',
 								null,
-								this.state.hint
+								userGuess[userGuess.length - 1] < this.state.numberToGuess ? "Too low" : "Too high"
 							),
 							React.createElement(
 								'p',
 								null,
 								'Your guesses: ',
-								this.state.guesses.toString(', ')
+								userGuess.toString(',')
 							),
 							React.createElement(
 								'p',
 								null,
 								'Remaining tries: ',
-								this.state.guesses.length
+								userGuess.length
 							)
 						)
 					);

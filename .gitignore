@@ -1,0 +1,18 @@
+## General
+*.bak
+*.log
+*.swp
+*.iml
+
+## Windows
+Desktop.ini
+Thumbs.db
+
+## Mac
+.DS_Store
+
+## Development
+.sass-cache
+bower_components
+node_modules
+.idea
