@@ -21433,6 +21433,7 @@
 	var YouClicked = __webpack_require__(176);
 	var CharacterCounter = __webpack_require__(177);
 	var CharacterLimit = __webpack_require__(178);
+	var NumberGuessing = __webpack_require__(179);
 	
 	var imageList = [{ id: 42, source: "http://placekitten.com/g/210/210", text: "Hello kittenz!" }, { id: 43, source: "https://facebook.github.io/react/img/logo.svg", text: "React Logo" }, { id: 44, source: "https://media.giphy.com/media/EldfH1VJdbrwY/giphy.gif", text: "Mind Blown!" }];
 	
@@ -21518,6 +21519,13 @@
 					'Character Limit'
 				),
 				React.createElement(CharacterLimit, { limit: 10 }),
+				React.createElement('hr', null),
+				React.createElement(
+					'h2',
+					null,
+					'Guess the Number V1.0!'
+				),
+				React.createElement(NumberGuessing, null),
 				React.createElement('hr', null)
 			);
 		}
@@ -21786,6 +21794,124 @@
 	});
 	
 	module.exports = CharacterLimit;
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var NumberGuessing = React.createClass({
+		displayName: 'NumberGuessing',
+	
+	
+		getInitialState: function getInitialState() {
+			return {};
+		},
+		startGame: function startGame() {
+			this.setState({
+				gameStatus: 'playing',
+				numberToGuess: Math.floor(Math.random() * 11),
+				guesses: [],
+				hint: ""
+			});
+		},
+		componentDidMount: function componentDidMount() {
+			this.startGame();
+		},
+		_handleUserGuess: function _handleUserGuess(event) {
+			var userGuess = parseInt(this.refs.userGuess.value);
+			var correctNum = parseInt(this.state.numberToGuess);
+			var tries = this.state.guesses.length;
+			if (userGuess === correctNum) {
+				this.setState({ gameStatus: 'win' });
+			} else {
+				if (tries < 5) {
+					if (userGuess < correctNum) {
+						this.setState({
+							guesses: this.state.guesses.concat(userGuess),
+							hint: "too low!"
+						});
+					}
+					if (userGuess > correctNum) {
+						this.setState({
+							guesses: this.state.guesses.concat(userGuess),
+							hint: "too high!"
+						});
+					}
+				}
+				if (tries >= 5) {
+					this.setState({ gameStatus: 'lose' });
+				}
+			}
+		},
+		render: function render() {
+			//if !this.state.gameStatus then return null
+			if (!this.state.gameStatus) {
+				return null;
+			}
+			//else if gs is win or lose 
+			//then render something different with a new game button
+			else if (this.state.gameStatus === 'win' || this.state.gameStatus === 'lose') {
+					return React.createElement(
+						'div',
+						null,
+						React.createElement(
+							'p',
+							null,
+							'You ',
+							this.state.gameStatus === 'win' ? "won" : "lost"
+						),
+						React.createElement(
+							'button',
+							{ onClick: this.startGame },
+							'New Game'
+						)
+					);
+				} else {
+					return React.createElement(
+						'div',
+						null,
+						React.createElement(
+							'p',
+							null,
+							'Guess a number between 1 and 100'
+						),
+						React.createElement('input', { ref: 'userGuess', type: 'text', value: this.state.value }),
+						React.createElement(
+							'button',
+							{ ref: 'guessBtn', onClick: this._handleUserGuess },
+							'Guess'
+						),
+						React.createElement(
+							'div',
+							null,
+							React.createElement(
+								'p',
+								null,
+								this.state.hint
+							),
+							React.createElement(
+								'p',
+								null,
+								'Your guesses: ',
+								this.state.guesses.toString(', ')
+							),
+							React.createElement(
+								'p',
+								null,
+								'Remaining tries: ',
+								this.state.guesses.length
+							)
+						)
+					);
+				}
+		}
+	});
+	
+	module.exports = NumberGuessing;
 
 /***/ }
 /******/ ]);
