@@ -21435,7 +21435,7 @@
 	var CharacterLimit = __webpack_require__(178);
 	var NumberGuessing = __webpack_require__(179);
 	var GithubProfile = __webpack_require__(180);
-	var GithubSearchForm = __webpack_require__(184);
+	var GithubSearchForm = __webpack_require__(182);
 	var GithubSearch = __webpack_require__(183);
 	
 	var imageList = [{ id: 42, source: "http://placekitten.com/g/210/210", text: "Hello kittenz!" }, { id: 43, source: "https://facebook.github.io/react/img/logo.svg", text: "React Logo" }, { id: 44, source: "https://media.giphy.com/media/EldfH1VJdbrwY/giphy.gif", text: "Mind Blown!" }];
@@ -21940,11 +21940,19 @@
 		getInitialState: function getInitialState() {
 			return {};
 		},
-		componentDidMount: function componentDidMount() {
-			var url = 'https://api.github.com/users/' + this.props.username;
+		fetchData: function fetchData() {
+			var url = 'https://api.github.com/users/' + this.props.username + '?access_token=39a35e270c3ea8369c5ffdfe29b5cae53bf44315';
 			$.getJSON(url).then(function (res) {
 				this.setState({ user: res });
 			}.bind(this));
+		},
+		componentDidMount: function componentDidMount() {
+			this.fetchData();
+		},
+		componentDidUpdate: function componentDidUpdate(prevProps) {
+			if (this.props.username !== prevProps.username) {
+				this.fetchData();
+			}
 		},
 		render: function render() {
 			if (!this.state.user) {
@@ -32211,40 +32219,7 @@
 
 
 /***/ },
-/* 182 */,
-/* 183 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var GithubProfile = __webpack_require__(180);
-	var GithubSearchForm = __webpack_require__(184);
-	
-	var GithubSearch = React.createClass({
-		displayName: 'GithubSearch',
-	
-		getInitialState: function getInitialState() {
-			return {};
-		},
-		_handleSearch: function _handleSearch(searchTerm) {
-			this.setState({ user: searchTerm });
-		},
-		//add a method to handle the search
-		render: function render() {
-			return React.createElement(
-				'div',
-				null,
-				React.createElement(GithubSearchForm, { onSearch: this._handleSearch }),
-				this.state.user ? React.createElement(GithubProfile, { username: this.state.user }) : null
-			);
-		}
-	});
-	
-	module.exports = GithubSearch;
-
-/***/ },
-/* 184 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32283,6 +32258,38 @@
 	});
 	
 	module.exports = GithubSearchForm;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var GithubProfile = __webpack_require__(180);
+	var GithubSearchForm = __webpack_require__(182);
+	
+	var GithubSearch = React.createClass({
+		displayName: 'GithubSearch',
+	
+		getInitialState: function getInitialState() {
+			return {};
+		},
+		_handleSearch: function _handleSearch(searchTerm) {
+			this.setState({ user: searchTerm });
+		},
+		//add a method to handle the search
+		render: function render() {
+			return React.createElement(
+				'div',
+				null,
+				React.createElement(GithubSearchForm, { onSearch: this._handleSearch }),
+				this.state.user ? React.createElement(GithubProfile, { username: this.state.user }) : null
+			);
+		}
+	});
+	
+	module.exports = GithubSearch;
 
 /***/ }
 /******/ ]);

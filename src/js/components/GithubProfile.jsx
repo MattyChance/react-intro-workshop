@@ -9,11 +9,19 @@ var GithubProfile = React.createClass({
 	getInitialState: function() {
 		return {};
 	},
-	componentDidMount: function() {
-		var url = 'https://api.github.com/users/' + this.props.username;
+	fetchData: function() {
+		var url = 'https://api.github.com/users/' + this.props.username + '?access_token=39a35e270c3ea8369c5ffdfe29b5cae53bf44315';
 		$.getJSON(url).then(function(res) {
 			this.setState({user: res});
 		}.bind(this));
+	},
+	componentDidMount: function() {
+		this.fetchData();
+	},
+	componentDidUpdate: function(prevProps) {
+		if(this.props.username !== prevProps.username) {
+			this.fetchData();
+		}
 	},
 	render: function() {
 		if(!this.state.user) {
