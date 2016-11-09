@@ -21435,6 +21435,8 @@
 	var CharacterLimit = __webpack_require__(178);
 	var NumberGuessing = __webpack_require__(179);
 	var GithubProfile = __webpack_require__(180);
+	var GithubSearchForm = __webpack_require__(184);
+	var GithubSearch = __webpack_require__(183);
 	
 	var imageList = [{ id: 42, source: "http://placekitten.com/g/210/210", text: "Hello kittenz!" }, { id: 43, source: "https://facebook.github.io/react/img/logo.svg", text: "React Logo" }, { id: 44, source: "https://media.giphy.com/media/EldfH1VJdbrwY/giphy.gif", text: "Mind Blown!" }];
 	
@@ -21534,6 +21536,13 @@
 					'Components and AJAX'
 				),
 				React.createElement(GithubProfile, { username: 'gaearon' }),
+				React.createElement('hr', null),
+				React.createElement(
+					'h2',
+					null,
+					'inter-component communication'
+				),
+				React.createElement(GithubSearch, null),
 				React.createElement('hr', null)
 			);
 		}
@@ -32200,6 +32209,80 @@
 	return jQuery;
 	} );
 
+
+/***/ },
+/* 182 */,
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var GithubProfile = __webpack_require__(180);
+	var GithubSearchForm = __webpack_require__(184);
+	
+	var GithubSearch = React.createClass({
+		displayName: 'GithubSearch',
+	
+		getInitialState: function getInitialState() {
+			return {};
+		},
+		_handleSearch: function _handleSearch(searchTerm) {
+			this.setState({ user: searchTerm });
+		},
+		//add a method to handle the search
+		render: function render() {
+			return React.createElement(
+				'div',
+				null,
+				React.createElement(GithubSearchForm, { onSearch: this._handleSearch }),
+				this.state.user ? React.createElement(GithubProfile, { username: this.state.user }) : null
+			);
+		}
+	});
+	
+	module.exports = GithubSearch;
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var GithubSearchForm = React.createClass({
+		displayName: 'GithubSearchForm',
+	
+		propTypes: {
+			onSearch: React.PropTypes.func
+		},
+		//pass the method _handleSearch as a prop to here
+		_handleSubmit: function _handleSubmit(event) {
+			event.preventDefault();
+			this.props.onSearch(this.refs.userInput.value);
+		},
+		render: function render() {
+			return React.createElement(
+				'form',
+				{ onSubmit: this._handleSubmit },
+				React.createElement(
+					'p',
+					null,
+					'Enter a Github username: '
+				),
+				React.createElement('input', { ref: 'userInput', type: 'text' }),
+				React.createElement(
+					'button',
+					null,
+					'Go!'
+				)
+			);
+		}
+	
+	});
+	
+	module.exports = GithubSearchForm;
 
 /***/ }
 /******/ ]);
